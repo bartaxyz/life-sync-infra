@@ -6,15 +6,25 @@ const RequestBodySchema = z.object({
   /**
    * The type of data being sent, e.g. "location", "vitals", etc.
    */
-  type: z.string(),
+  type: z.enum(["location", "vitals", "mentalWellbeing"]),
   /**
    * The data being sent
    */
-  data: z.any(),
-  /**
-   * The timestamp of the data
-   */
-  timestamp: z.number(),
+  data: z
+    .object({
+      /**
+       * The timestamp of the data
+       */
+      timestamp: z.number(),
+      /**
+       * The source of the data, e.g. "iOS", "watchOS", etc.
+       */
+      source: z.string(),
+    })
+    /**
+     * Any other data
+     */
+    .passthrough(),
 });
 
 type RequestBody = z.infer<typeof RequestBodySchema>;
@@ -27,10 +37,14 @@ export const lifeSync = async (req: Request, res: Response) => {
   const body: RequestBody = req.body;
 
   // Validate the request body
-  if (!RequestBodySchema.safeParse(body).success) {
+  const schemaValidationResult = RequestBodySchema.safeParse(body);
+
+  if (!schemaValidationResult.success) {
     return res
       .status(400)
-      .send(`Invalid request body: ${JSON.stringify(body)}`);
+      .send(
+        `Invalid request body: ${JSON.stringify(schemaValidationResult.error)}`
+      );
   }
 
   // Bucket & file name
