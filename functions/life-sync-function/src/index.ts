@@ -1,4 +1,3 @@
-import functions from "@google-cloud/functions-framework";
 import { Storage } from "@google-cloud/storage";
 import { Request, Response } from "express";
 import { z } from "zod";
@@ -20,7 +19,7 @@ const RequestBodySchema = z.object({
 
 type RequestBody = z.infer<typeof RequestBodySchema>;
 
-functions.http("life-sync", async (req: Request, res: Response) => {
+export const lifeSync = async (req: Request, res: Response) => {
   if (req.method !== "POST") {
     return res.status(405).send("Method Not Allowed");
   }
@@ -56,4 +55,4 @@ functions.http("life-sync", async (req: Request, res: Response) => {
   }
 
   res.status(200).send(`File ${fileName} overwritten in ${bucketName}.`);
-});
+};
