@@ -1,58 +1,23 @@
-# Life Sync Infrastructure
+# Life Sync Infra
 
-Infrastructure as code for the Life Sync application using Terraform on Google Cloud Platform.
+Infrastructure and backend services powering the [For As Long As I'm Alive project](https://ondrejbarta.com).
 
-## Components
+## Overview
 
-- Google Cloud Storage bucket for data storage
-- Cloud Function v2 for API functionality (written in TypeScript)
+This repository uses infrastructure-as-code to automatically maintain the Google Cloud Platform resources needed for the project:
 
-## Setup
+- Cloud Storage buckets for persistent data storage
+- Cloud Functions (v2) for serverless API endpoints 
+- IAM configuration for secure resource access
 
-1. Install Terraform
-2. Configure GCP credentials
-3. Initialize Terraform:
+## CI/CD Pipeline
 
-```bash
-terraform init
-```
+Deployment is fully automated:
+- Merges to main branch trigger Terraform deployment via GitHub Actions
+- Infrastructure changes are applied automatically
+- Function code is built and deployed as part of the pipeline
 
-4. Apply the configuration:
+## Repository Structure
 
-```bash
-terraform plan
-terraform apply
-```
-
-5. Import existing bucket (if needed):
-
-```bash
-terraform import google_storage_bucket.life_sync personal-website-322920/life-sync
-```
-
-## Function Development
-
-The Cloud Function is written in TypeScript:
-
-```bash
-cd function
-npm install
-npm run dev   # Local development with hot reload
-npm run start # Run locally with functions-framework
-npm run build # Build for production
-```
-
-## Manual Deployment
-
-The function can be manually deployed using:
-
-```bash
-cd function
-npm run deploy
-```
-
-Or let Terraform handle the deployment by running:
-
-```bash
-terraform apply
-```
+- `/functions` - Cloud Function implementation
+- `*.tf` - Terraform configuration files
