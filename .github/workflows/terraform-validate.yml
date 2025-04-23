@@ -20,9 +20,7 @@ jobs:
         terraform_version: 1.5.7
 
     - name: Init Terraform
-      working-directory: terraform
       run: terraform init -backend=false
 
     - name: Validate Terraform
-      working-directory: terraform
       run: terraform validate
