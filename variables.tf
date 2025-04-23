@@ -27,8 +27,8 @@ variable "functions" {
   default = [
     {
       name = "life-sync-function"
-      entry_point = "life-sync"
-      source_dir = "functions/life-sync-function"
+      entry_point = "lifeSync"
+      source_dir = "life-sync-function"
     }
   ]
 }
