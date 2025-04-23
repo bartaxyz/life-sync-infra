@@ -20,6 +20,7 @@ data "archive_file" "function_zip" {
   type        = "zip"
   output_path = "${path.module}/functions/${each.value.name}.zip"
   source_dir  = "${path.module}/functions/${each.value.name}"
+  excludes    = ["node_modules", "dist"]
 }
 
 resource "google_storage_bucket_object" "function_source_zip" {
@@ -35,7 +36,7 @@ resource "google_cloudfunctions2_function" "functions" {
   location = var.region
   
   build_config {
-    runtime     = "nodejs18"
+    runtime     = "nodejs22"
     entry_point = each.value.entry_point
     source {
       storage_source {
