@@ -9,4 +9,9 @@ terraform {
       version = "~> 2.3.0"
     }
   }
+
+  backend "gcs" {
+    bucket = "life-sync-terraform-state"
+    prefix = "terraform/state"
+  }
 }
