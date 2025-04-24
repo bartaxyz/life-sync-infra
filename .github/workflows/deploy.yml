@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-        GOOGLE_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+        TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
 
     steps:
       - name: Checkout code
