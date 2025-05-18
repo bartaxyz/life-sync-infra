@@ -3,22 +3,10 @@ provider "google" {
   region  = var.region
 }
 
-resource "google_secret_manager_secret" "apple_id" {
-  secret_id = "allowed-apple-id"
-  replication {
-    auto {}
-  }
-}
-
-resource "google_secret_manager_secret_version" "apple_id_version" {
-  secret      = google_secret_manager_secret.apple_id.id
-  secret_data = var.allowed_apple_id
-}
-
 resource "google_storage_bucket" "life_sync_bucket" {
   name     = var.storage_bucket_name
   location = var.region
-  
+
   uniform_bucket_level_access = true
 
   cors {
@@ -35,7 +23,7 @@ resource "google_storage_bucket" "function_source" {
 }
 
 data "archive_file" "function_zip" {
-  for_each = { for f in var.functions : f.name => f }
+  for_each    = { for f in var.functions : f.name => f }
   type        = "zip"
   output_path = "${path.module}/functions/${each.value.name}.zip"
   source_dir  = "${path.module}/functions/${each.value.name}"
@@ -44,16 +32,16 @@ data "archive_file" "function_zip" {
 
 resource "google_storage_bucket_object" "function_source_zip" {
   for_each = { for f in var.functions : f.name => f }
-  name   = "function-source-${data.archive_file.function_zip[each.value.name].output_md5}.zip"
-  bucket = google_storage_bucket.function_source.name
-  source = data.archive_file.function_zip[each.value.name].output_path
+  name     = "function-source-${data.archive_file.function_zip[each.value.name].output_md5}.zip"
+  bucket   = google_storage_bucket.function_source.name
+  source   = data.archive_file.function_zip[each.value.name].output_path
 }
 
 resource "google_cloudfunctions2_function" "functions" {
   for_each = { for f in var.functions : f.name => f }
   name     = each.value.name
   location = var.region
-  
+
   build_config {
     runtime     = "nodejs22"
     entry_point = each.value.entry_point
@@ -64,12 +52,14 @@ resource "google_cloudfunctions2_function" "functions" {
       }
     }
   }
-  
+
   service_config {
-    max_instance_count    = 1
-    available_memory      = "256M"
-    timeout_seconds       = 60
-    environment_variables = {}
+    max_instance_count = 1
+    available_memory   = "256M"
+    timeout_seconds    = 60
+    environment_variables = {
+      ALLOWED_APPLE_ID = var.allowed_apple_id
+    }
   }
 }
 

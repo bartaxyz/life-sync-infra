@@ -11,6 +11,7 @@ jobs:
     
     env:
         TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
+        TF_VAR_allowed_apple_id: ${{ secrets.ALLOWED_APPLE_ID }}
 
     steps:
       - name: Checkout code
