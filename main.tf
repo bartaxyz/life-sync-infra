@@ -20,6 +20,13 @@ resource "google_storage_bucket" "life_sync_bucket" {
   location = var.region
   
   uniform_bucket_level_access = true
+
+  cors {
+    origin          = ["*"]
+    method          = ["GET", "HEAD", "PUT", "POST", "DELETE"]
+    response_header = ["*"]
+    max_age_seconds = 3600
+  }
 }
 
 resource "google_storage_bucket" "function_source" {
