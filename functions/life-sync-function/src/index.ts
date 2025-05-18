@@ -42,7 +42,10 @@ export const lifeSync = async (req: Request, res: Response) => {
     return res.status(401).send("Apple ID header is required");
   }
 
-  if (appleId !== allowedAppleId) {
+  if (
+    typeof appleId === "string" &&
+    !appleId.startsWith(allowedAppleId as string)
+  ) {
     return res.status(403).send("Invalid Apple ID");
   }
 
