@@ -21,3 +21,10 @@ Deployment is fully automated:
 
 - `/functions` - Cloud Function implementation
 - `*.tf` - Terraform configuration files
+
+## Security
+
+### Authentication
+- All API endpoints require Apple ID authentication via the `x-apple-id` header
+- Only pre-approved Apple ID is allowed to access the endpoints
+- Apple ID validation is enforced at the Cloud Function level
