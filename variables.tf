@@ -3,6 +3,11 @@ variable "project_id" {
   type        = string
 }
 
+variable "allowed_apple_id" {
+  type      = string
+  sensitive = true
+}
+
 variable "region" {
   description = "GCP region"
   default     = "europe-west1"

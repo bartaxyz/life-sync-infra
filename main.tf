@@ -3,6 +3,18 @@ provider "google" {
   region  = var.region
 }
 
+resource "google_secret_manager_secret" "apple_id" {
+  secret_id = "allowed-apple-id"
+  replication {
+    auto {}
+  }
+}
+
+resource "google_secret_manager_secret_version" "apple_id_version" {
+  secret      = google_secret_manager_secret.apple_id.id
+  secret_data = var.allowed_apple_id
+}
+
 resource "google_storage_bucket" "life_sync_bucket" {
   name     = var.storage_bucket_name
   location = var.region
