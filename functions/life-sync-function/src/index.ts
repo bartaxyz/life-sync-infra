@@ -6,7 +6,7 @@ const RequestBodySchema = z.object({
   /**
    * The type of data being sent, e.g. "location", "vitals", etc.
    */
-  type: z.enum(["location", "vitals", "mentalWellbeing"]),
+  type: z.enum(["location", "vitals", "mentalWellbeing", "sleep"]),
   /**
    * The data being sent
    */
