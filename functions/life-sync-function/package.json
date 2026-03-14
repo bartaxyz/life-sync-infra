@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "build:check": "tsc --noEmit",
     "start": "functions-framework --target=app",
     "dev": "ts-node-dev --respawn src/index.ts",
     "deploy": "gcloud functions deploy life-sync-function --gen2 --runtime=nodejs22 --region=europe-west1 --trigger-http --entry-point=app --allow-unauthenticated",
