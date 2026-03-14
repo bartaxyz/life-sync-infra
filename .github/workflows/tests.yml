@@ -6,6 +6,10 @@ on:
       - 'functions/**'
       - '.github/workflows/tests.yml'
 
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -26,7 +30,7 @@ jobs:
           cache-dependency-path: functions/life-sync-function/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Run tests with coverage
         run: npm run test:coverage
