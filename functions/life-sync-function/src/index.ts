@@ -29,8 +29,6 @@ const RequestBodySchema = z.object({
 
 type RequestBody = z.infer<typeof RequestBodySchema>;
 
-const allowedAppleId = process.env.ALLOWED_APPLE_ID;
-
 export const lifeSync = async (req: Request, res: Response) => {
   if (req.method !== "POST") {
     return res.status(405).send("Method Not Allowed");
@@ -42,6 +40,7 @@ export const lifeSync = async (req: Request, res: Response) => {
     return res.status(401).send("Apple ID header is required");
   }
 
+  const allowedAppleId = process.env.ALLOWED_APPLE_ID;
   if (
     typeof appleId === "string" &&
     !appleId.startsWith(allowedAppleId as string)

@@ -1,17 +1,17 @@
-name: TypeScript Build
+name: Tests
 
 on:
   pull_request:
     paths:
       - 'functions/**'
-      - '.github/workflows/typescript-build.yml'
+      - '.github/workflows/tests.yml'
 
 concurrency:
-  group: typescript-build-${{ github.ref }}
+  group: tests-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     defaults:
@@ -30,7 +30,14 @@ jobs:
           cache-dependency-path: functions/life-sync-function/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
-      - name: Type check
-        run: npm run build:check
+      - name: Run tests with coverage
+        run: npm run test:coverage
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: functions/life-sync-function/coverage/
