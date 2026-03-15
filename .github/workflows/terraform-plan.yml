@@ -6,6 +6,10 @@ on:
       - '**/*.tf'
       - '.github/workflows/terraform-plan.yml'
 
+concurrency:
+  group: terraform-plan-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
   pull-requests: write
